@@ -82,42 +82,7 @@ function addNote() {
     label.addEventListener('touchstart', function () {
         changeNote(noteDiv, label);
     });
-    // label.addEventListener('touchstart', function () {
-    //     timer = setTimeout(function () {
-    //         // noteDiv.classList.add(CL_EDITING);
-    //
-    //         let edit = document.createElement('input');
-    //         let finished = false;
-    //         edit.setAttribute('type', 'text');
-    //         edit.setAttribute('class', 'edit');
-    //         edit.setAttribute('value', label.innerHTML);
-    //
-    //         function finish() {
-    //             if (finished)
-    //                 return;
-    //             finished = true;
-    //             noteDiv.removeChild(edit);
-    //             // noteDiv.classList.remove(CL_EDITING);
-    //         }
-    //
-    //         edit.addEventListener('blur', function() {
-    //             finish();
-    //         });
-    //
-    //         edit.addEventListener('keyup', function(ev) {
-    //             if (ev.keyCode === 27) { // Esc
-    //                 finish();
-    //             } else if (ev.keyCode === 13) {
-    //                 label.innerHTML = this.value;
-    //                 finish();
-    //             }
-    //         });
-    //
-    //         // noteDiv.appendChild(edit);
-    //         noteDiv.insertBefore(edit, noteDiv.lastChild);
-    //         edit.focus();
-    //     }, 2000);
-    // });
+
     label.addEventListener('touchend', function () {
         clearTimeout(timer);
     });
@@ -261,42 +226,7 @@ function addFromStorage() {
             label.addEventListener('touchstart', function () {
                 changeNote(noteDiv, label);
             });
-            // label.addEventListener('touchstart', function () {
-            //     timer = setTimeout(function () {
-            //         // noteDiv.classList.add(CL_EDITING);
-            //
-            //         let edit = document.createElement('input');
-            //         let finished = false;
-            //         edit.setAttribute('type', 'text');
-            //         edit.setAttribute('class', 'edit');
-            //         edit.setAttribute('value', label.innerHTML);
-            //
-            //         function finish() {
-            //             if (finished)
-            //                 return;
-            //             finished = true;
-            //             noteDiv.removeChild(edit);
-            //             // noteDiv.classList.remove(CL_EDITING);
-            //         }
-            //
-            //         edit.addEventListener('blur', function() {
-            //             finish();
-            //         });
-            //
-            //         edit.addEventListener('keyup', function(ev) {
-            //             if (ev.keyCode === 27) { // Esc
-            //                 finish();
-            //             } else if (ev.keyCode === 13) {
-            //                 label.innerHTML = this.value;
-            //                 finish();
-            //             }
-            //         });
-            //
-            //         // noteDiv.appendChild(edit);
-            //         noteDiv.insertBefore(edit, noteDiv.lastChild);
-            //         edit.focus();
-            //     }, 2000);
-            // });
+
             label.addEventListener('touchend', function () {
                 clearTimeout(timer);
             });
