@@ -28,7 +28,7 @@ body {
 #inputHour, #inputMinute {
     height: 30px;
     position: relative;
-    left: 5%;
+    left: 10px;
     width: 10%;
 }
 
