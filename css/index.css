@@ -166,3 +166,19 @@ body {
 #clearAll {
     float: right;
 }
+
+#audio {
+    text-align: center;
+    height: 25px;
+}
+
+#audioDiv p {
+    margin-top: 0;
+    font-size: 15px;
+}
+
+#audioDiv{
+    margin: 100px auto 20px auto;
+    width: 90%;
+    text-align: center;
+}

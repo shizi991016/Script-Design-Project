@@ -219,7 +219,6 @@ function changeNote(noteDiv, label) {
             }
         });
 
-        // noteDiv.appendChild(edit);
         noteDiv.insertBefore(edit, noteDiv.lastChild);
         edit.focus();
     }, 2000)
@@ -232,7 +231,17 @@ function addTHMLNode(noteDiv, timeId, time, note, noteDivId, listDiv) {
         '<p class="note-label">' + note + '</p>',
         '<button class="destroy">X</button>'
     ].join('');
-    // inputText.value = '';
+
+    let clock = dealDate(time);
+    if (clock !== null)
+    {
+        setTimeout(function () {
+            let audio = $('audio');
+            audio.muted = false;
+            audio.play();
+        }, clock);
+    }
+
 
     let label = noteDiv.querySelector('.note-label');
     label.addEventListener('touchstart', function () {
@@ -251,7 +260,6 @@ function addTHMLNode(noteDiv, timeId, time, note, noteDivId, listDiv) {
         removeNote(noteDivId);
     });
 
-    // listDiv.insertBefore(noteDiv, listDiv.firstChild);
     let listChild = listDiv.firstChild;
     for (let i = 0; i < listDiv.childNodes.length; i++)
     {
@@ -266,4 +274,19 @@ function addTHMLNode(noteDiv, timeId, time, note, noteDivId, listDiv) {
         }
     }
     listDiv.insertBefore(noteDiv, listChild);
+}
+
+function dealDate(dateString) {
+    let now = new Date();
+    let nowHour = now.getHours();
+    let nowMinute = now.getMinutes();
+    dateString = dateString.split(":");
+    let forHour = parseInt(dateString[0]);
+    let forMinute = parseInt(dateString[1]);
+    let hour = forHour - nowHour;
+    let minute = forMinute - nowMinute;
+    if (hour < 0 || (hour === 0 && minute <= 0))
+        return null;
+    else
+        return hour * 60 * 60 * 1000 + minute * 60 * 1000;
 }
