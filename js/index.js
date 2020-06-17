@@ -66,50 +66,10 @@ function addNote() {
     let minute = $('inputMinute').value;
     let time = hour + ':' + minute;
     let timeId = hour + minute;
-    noteDiv.innerHTML = [
-        '<input class="toggle" type="checkbox">',
-        '<label class="note-time" id="' + timeId + '">' + time + '</label>',
-        '<p class="note-label">' + note + '</p>',
-        '<button class="destroy">X</button>'
-    ].join('');
-    inputText.value = '';
-
+    addTHMLNode(noteDiv, timeId, time, note, id, listDiv);
     let message = timeId + ";" + time + ";" + note + ";" + "active";
     storage.setItem(id, message);
-
-
-    let label = noteDiv.querySelector('.note-label');
-    label.addEventListener('touchstart', function () {
-        changeNote(noteDiv, label);
-    });
-
-    label.addEventListener('touchend', function () {
-        clearTimeout(timer);
-    });
-
-    noteDiv.querySelector('.toggle').addEventListener('change', function() {
-        updateNote(id, this.checked);
-    });
-
-    noteDiv.querySelector('.destroy').addEventListener('click', function() {
-        removeNote(id);
-    });
-
-    // listDiv.insertBefore(noteDiv, listDiv.firstChild);
-    let listChild = listDiv.firstChild;
-    for (let i = 0; i < listDiv.childNodes.length; i++)
-    {
-        if (listDiv.childNodes[i].querySelector('.note-time').id <= timeId)
-        {
-            listChild = listDiv.childNodes[i];
-        }
-        else
-        {
-            listChild = listDiv.childNodes[i];
-            break;
-        }
-    }
-    listDiv.insertBefore(noteDiv, listChild);
+    inputText.value = '';
     update();
 }
 
@@ -213,48 +173,15 @@ function addFromStorage() {
             let noteDiv = document.createElement('div');
             noteDiv.setAttribute('id', id);
             noteDiv.setAttribute('class', 'noteDiv');
-            noteDiv.innerHTML = [
-                '<input class="toggle" type="checkbox">',
-                '<label class="note-time" id="' + text[0] + '">' + text[1] + '</label>',
-                '<p class="note-label">' + text[2] + '</p>',
-                '<button class="destroy">X</button>'
-            ].join('');
+            addTHMLNode(noteDiv, text[0], text[1], text[2], id, listDiv);
             if (text[3] !== "active")
-                noteDiv.classList.add(CL_COMPLETED);
-
-            let label = noteDiv.querySelector('.note-label');
-            label.addEventListener('touchstart', function () {
-                changeNote(noteDiv, label);
-            });
-
-            label.addEventListener('touchend', function () {
-                clearTimeout(timer);
-            });
-
-            noteDiv.querySelector('.toggle').addEventListener('change', function() {
-                updateNote(id, this.checked);
-            });
-
-            noteDiv.querySelector('.destroy').addEventListener('click', function() {
-                removeNote(id);
-            });
-            let listChild = listDiv.firstChild;
-            for (let i = 0; i < listDiv.childNodes.length; i++)
             {
-                if (listDiv.childNodes[i].querySelector('.note-time').id <= text[0])
-                {
-                    listChild = listDiv.childNodes[i];
-                }
-                else
-                {
-                    listChild = listDiv.childNodes[i];
-                    break;
-                }
+                noteDiv.classList.add(CL_COMPLETED);
+                noteDiv.querySelector('.toggle').checked = true;
             }
-            listDiv.insertBefore(noteDiv, listChild);
-            update();
         }
     }
+    update();
 }
 
 function changeNote(noteDiv, label) {
@@ -296,4 +223,47 @@ function changeNote(noteDiv, label) {
         noteDiv.insertBefore(edit, noteDiv.lastChild);
         edit.focus();
     }, 2000)
+}
+
+function addTHMLNode(noteDiv, timeId, time, note, noteDivId, listDiv) {
+    noteDiv.innerHTML = [
+        '<input class="toggle" type="checkbox">',
+        '<label class="note-time" id="' + timeId + '">' + time + '</label>',
+        '<p class="note-label">' + note + '</p>',
+        '<button class="destroy">X</button>'
+    ].join('');
+    // inputText.value = '';
+
+    let label = noteDiv.querySelector('.note-label');
+    label.addEventListener('touchstart', function () {
+        changeNote(noteDiv, label);
+    });
+
+    label.addEventListener('touchend', function () {
+        clearTimeout(timer);
+    });
+
+    noteDiv.querySelector('.toggle').addEventListener('change', function() {
+        updateNote(noteDivId, this.checked);
+    });
+
+    noteDiv.querySelector('.destroy').addEventListener('click', function() {
+        removeNote(noteDivId);
+    });
+
+    // listDiv.insertBefore(noteDiv, listDiv.firstChild);
+    let listChild = listDiv.firstChild;
+    for (let i = 0; i < listDiv.childNodes.length; i++)
+    {
+        if (listDiv.childNodes[i].querySelector('.note-time').id <= timeId)
+        {
+            listChild = listDiv.childNodes[i];
+        }
+        else
+        {
+            listChild = listDiv.childNodes[i];
+            break;
+        }
+    }
+    listDiv.insertBefore(noteDiv, listChild);
 }
