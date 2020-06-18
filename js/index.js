@@ -6,33 +6,42 @@ function $All(className) {
     return document.querySelectorAll(className);
 }
 
+// 静态类命名
 const CL_COMPLETED = 'completed';
 const CL_EDITING = 'editing';
 let noteId = 0;
+// 计时器用于判断长按
 let timer = null;
+// 用于过滤 completed 或者 active
 let filter = 1;
 
 let storage = window.localStorage;
 
 
 window.onload = function() {
+    // 从本地存储获取当前 note id
     let noteid = parseInt(storage.getItem('noteId'));
     if (noteid)
         noteId = noteid;
+    // 从本地存储添加 note
     addFromStorage();
 
+    // 回车输入
     $('inputText').addEventListener('keyup', function (event) {
         if (event.keyCode !== 13)
             return;
         addNote();
     });
 
+    // note 全选
     $('toggleAll').addEventListener('change', toggleAllList);
 
+    // 删除全部已完成
     let clearAllButton = $('clearAll');
     clearAllButton.addEventListener('click', clearCompletedList);
     clearAllButton.classList.add('hidden');
 
+    // 过滤 completed / active / all
     $('all').addEventListener('click', function () {
         filter = 1;
         clearAllButton.classList.add('hidden');
@@ -50,6 +59,7 @@ window.onload = function() {
     });
 };
 
+// 将用户输入添加到html
 function addNote() {
     let inputText = $('inputText');
     let note = inputText.value;
@@ -59,6 +69,7 @@ function addNote() {
     let listDiv = $('listDiv');
     let noteDiv = document.createElement('div');
     let id = 'note' + noteId++;
+    // 将当前 id 存入本地存储，防止恢复之后 id 出现冲突
     storage.setItem('noteId', noteId.toString());
     noteDiv.setAttribute('id', id);
     noteDiv.setAttribute('class', 'noteDiv');
@@ -66,13 +77,16 @@ function addNote() {
     let minute = $('inputMinute').value;
     let time = hour + ':' + minute;
     let timeId = hour + minute;
+    // 向html中添加节点
     addTHMLNode(noteDiv, timeId, time, note, id, listDiv);
     let message = timeId + ";" + time + ";" + note + ";" + "active";
+    // 将 note 存入本地存储
     storage.setItem(id, message);
     inputText.value = '';
     update();
 }
 
+// 更新 note 状态， completed / active
 function updateNote(noteId, completed) {
     let noteDiv = $(noteId);
     if (completed)
@@ -89,6 +103,7 @@ function updateNote(noteId, completed) {
     update();
 }
 
+// 删除 note
 function removeNote(noteId) {
     let listDiv = $('listDiv');
     let noteDiv = $(noteId);
@@ -98,6 +113,7 @@ function removeNote(noteId) {
     update();
 }
 
+// 按照 filter 更新 html 内容，更新当前 active note 个数
 function update() {
     let count = 0;
     let notes = $All('.noteDiv');
@@ -115,6 +131,7 @@ function update() {
     $('count').innerText = count + ' notes left';
 }
 
+// 清除已完成的 note
 function clearCompletedList() {
     let listDiv = $('listDiv');
     let notes = listDiv.querySelectorAll('.noteDiv');
@@ -129,6 +146,7 @@ function clearCompletedList() {
     update();
 }
 
+// 全选
 function toggleAllList() {
     let notes = $All('.noteDiv');
     let toggleAll = $('toggleAll');
@@ -153,6 +171,9 @@ function toggleAllList() {
     update();
 }
 
+// 更新存储信息
+// index=2 表示更新 note 内容
+// index=3 表示更新 note 状态
 function updateStorage(noteId, str, index)
 {
     let stores = storage.getItem(noteId).split(";");
@@ -161,6 +182,7 @@ function updateStorage(noteId, str, index)
     storage.setItem(noteId, message);
 }
 
+// 从本地存储增加 note
 function addFromStorage() {
     let listDiv = $('listDiv');
     for (let i = 0; i < noteId; i++)
@@ -184,6 +206,7 @@ function addFromStorage() {
     update();
 }
 
+// 更改 note 内容
 function changeNote(noteDiv, label) {
     timer = setTimeout(function () {
         noteDiv.classList.add(CL_EDITING);
@@ -224,6 +247,7 @@ function changeNote(noteDiv, label) {
     }, 2000)
 }
 
+// 向 html 中增加节点
 function addTHMLNode(noteDiv, timeId, time, note, noteDivId, listDiv) {
     noteDiv.innerHTML = [
         '<input class="toggle" type="checkbox">',
@@ -232,6 +256,7 @@ function addTHMLNode(noteDiv, timeId, time, note, noteDivId, listDiv) {
         '<button class="destroy">X</button>'
     ].join('');
 
+    // 设置铃声延迟
     let clock = dealDate(time);
     if (clock !== null)
     {
@@ -276,6 +301,7 @@ function addTHMLNode(noteDiv, timeId, time, note, noteDivId, listDiv) {
     listDiv.insertBefore(noteDiv, listChild);
 }
 
+// 获取当前 Date ，计算当前时间与设置时间之间的差距
 function dealDate(dateString) {
     let now = new Date();
     let nowHour = now.getHours();
