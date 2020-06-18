@@ -215,7 +215,7 @@ function changeNote(noteDiv, label) {
         let finished = false;
         edit.setAttribute('type', 'text');
         edit.setAttribute('class', 'edit');
-        edit.setAttribute('value', label.innerHTML);
+        edit.setAttribute('value', label.innerText);
 
         function finish() {
             if (finished)
@@ -230,11 +230,7 @@ function changeNote(noteDiv, label) {
         });
 
         edit.addEventListener('keyup', function (ev) {
-            if (ev.keyCode === 27)
-            { // Esc
-                finish();
-            }
-            else if (ev.keyCode === 13)
+            if (ev.keyCode === 13)
             {
                 label.innerHTML = this.value;
                 updateStorage(noteDiv.id, this.value, 2);
